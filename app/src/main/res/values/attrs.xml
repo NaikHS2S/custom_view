@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProgressIndicatorView">
+        <attr name="progress_back_color" format="color"/>
+        <attr name="progress_color" format="color"/>
+        <attr name="progress_bar_height" format="dimension"/>
+        <attr name="progress_text_size" format="dimension"/>
+        <attr name="progress_text_color" format="color"/>
+    </declare-styleable>
+</resources>
