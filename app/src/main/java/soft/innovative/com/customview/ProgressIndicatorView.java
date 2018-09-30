@@ -38,12 +38,18 @@ public class ProgressIndicatorView extends View {
     public ProgressIndicatorView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ProgressIndicatorView, defStyleAttr, 0);
-        progressColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_color, Color.rgb(0, 0, 100));
-        progressBackColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_back_color, Color.rgb(0, 100, 100));
-        progressTextColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_text_color, Color.rgb(80, 100, 200));
-        progressTextSize = attributes.getDimension(R.styleable.ProgressIndicatorView_progress_text_size, spToPixel(10));
-        progressBarHeight = attributes.getDimension(R.styleable.ProgressIndicatorView_progress_bar_height, dpToPixel(10f));
+        final TypedArray attributes = context.getTheme().obtainStyledAttributes(attrs,
+                R.styleable.ProgressIndicatorView, defStyleAttr, 0);
+        progressColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_color,
+                Color.rgb(0, 0, 100));
+        progressBackColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_back_color,
+                Color.rgb(0, 100, 100));
+        progressTextColor = attributes.getColor(R.styleable.ProgressIndicatorView_progress_text_color,
+                Color.rgb(80, 100, 200));
+        progressTextSize = attributes.getDimension(R.styleable.ProgressIndicatorView_progress_text_size,
+                spToPixel(10));
+        progressBarHeight = attributes.getDimension(R.styleable.ProgressIndicatorView_progress_bar_height,
+                dpToPixel(10f));
 
         attributes.recycle();
         initPaints();
@@ -57,19 +63,22 @@ public class ProgressIndicatorView extends View {
 
     @Override
     protected int getSuggestedMinimumHeight() {
-        return Math.max((int) progressTextSize, Math.max((int) progressBarHeight, (int) progressBarHeight));
+        return Math.max((int) progressTextSize, Math.max((int) progressBarHeight,
+                (int) progressBarHeight));
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        setMeasuredDimension(measure(widthMeasureSpec, true), measure(heightMeasureSpec, false));
+        setMeasuredDimension(measure(widthMeasureSpec, true),
+                measure(heightMeasureSpec, false));
     }
 
     private int measure(int measureSpec, boolean isWidth) {
         int result;
         int mode = MeasureSpec.getMode(measureSpec);
         int size = MeasureSpec.getSize(measureSpec);
-        int padding = isWidth ? getPaddingLeft() + getPaddingRight() : getPaddingTop() + getPaddingBottom();
+        int padding = isWidth ? getPaddingLeft() + getPaddingRight() : getPaddingTop()
+                + getPaddingBottom();
         if (mode == MeasureSpec.EXACTLY) {
             result = size;
         } else {
@@ -89,7 +98,8 @@ public class ProgressIndicatorView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
 
-        final String progressDisplayText = new StringBuilder().append(progress).append("%").toString();
+        final String progressDisplayText = new StringBuilder().append(progress)
+                .append("%").toString();
         final float displayedTextWidth = progressTextPaint.measureText(progressDisplayText);
         float displayedTextStartPosition;
 
@@ -104,7 +114,8 @@ public class ProgressIndicatorView extends View {
         } else {
             progressRectF.left = getPaddingLeft();
             progressRectF.top = getHeight() / 2f - progressBarHeight / 2f;
-            progressRectF.right = (getWidth() - getPaddingLeft() - getPaddingRight()) / (100f) * progress + getPaddingLeft();
+            progressRectF.right = (getWidth() - getPaddingLeft() - getPaddingRight())
+                    / (100f) * progress + getPaddingLeft();
             progressRectF.bottom = getHeight() / 2f + progressBarHeight / 2f;
             if (progress > 2)
                 displayedTextStartPosition = (progressRectF.right - displayedTextWidth / 2f);
@@ -118,17 +129,18 @@ public class ProgressIndicatorView extends View {
 
         }
 
-        displayedTextEndPosition = (int) ((getHeight() / 2f) - ((progressTextPaint.descent() + progressTextPaint.ascent()) / 2f));
+        displayedTextEndPosition = (int) ((getHeight() / 2f) - ((progressTextPaint.descent()
+                + progressTextPaint.ascent()) / 2f));
 
         if ((displayedTextStartPosition + displayedTextWidth) >= getWidth() - getPaddingRight()) {
             displayedTextStartPosition = getWidth() - getPaddingRight() - displayedTextWidth;
         }
 
         if (progress > 0) {
-            canvas.drawRect(progressRectF, progressBarPaint);
+            canvas.drawRoundRect(progressRectF,dpToPixel(4),dpToPixel(4), progressBarPaint);
         }
 
-        canvas.drawRect(backProgressRect, progressBackPaint);
+       canvas.drawRoundRect(backProgressRect,dpToPixel(4),dpToPixel(4), progressBackPaint);
 
         canvas.drawText(progressDisplayText, displayedTextStartPosition,
                 displayedTextEndPosition + dpToPixel(-20), progressTextPaint);
